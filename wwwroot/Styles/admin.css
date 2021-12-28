@@ -1,0 +1,398 @@
+* {
+	font-family: century gothic;
+	letter-spacing: 2px;margin: 0;padding: 0
+}
+
+/*
+	background: linear-gradient(
+-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+*/
+header {padding:5px ;height: auto;}
+header .logo {
+	display: inline-flex;
+}
+header .logo img{width: 30px;margin: auto}
+header span {
+	font-variant: small-caps;color: #333
+}
+
+.left {overflow: hidden;top: 10%}
+
+.medium > div {margin: 2% 0;border-top-right-radius: 20px}
+
+
+.users {display: none}
+.filter {
+	height: 0;overflow: hidden;padding: 0;
+	transform: scale(0,0);background:#fff;
+	transition: .3s ease-in-out;padding: 10px
+}
+.filter > div {margin: 20px 10px;}
+.filter-button h3 span {
+	color: #333;font-variant: small-caps;letter-spacing: 4px;
+	transition: .2s ease-in-out;cursor: pointer
+}
+
+
+.filter-button {padding: 10px }
+
+.filter-button i {
+	color: #333;cursor: pointer;transition: .2s ease-in-out;
+	padding: 10px;font-size: 14px; opacity: .4;
+}
+.filter-button:hover i {
+	transform:scale(1.1,1.1);opacity: 1;
+	transition: .5s ease-in-out
+}
+.filter-button:hover span {
+	letter-spacing: 5px;transition: .2s ease-in-out
+}
+.filter h5	 {
+	margin: 10px;text-transform: capitalize;
+	letter-spacing: 2px;font-weight: normal
+}
+.request-inputs label {
+	margin: 5px
+}
+.filter-name input {
+	border: none;outline: none;background: transparent;
+	border-bottom: 1px solid #333;border-radius: 0;
+	color: #333;cursor: text;margin: 10px 0
+}
+
+
+
+
+
+
+
+
+/**************Officers*********88*/
+.contain {
+	height: 400px;
+	overflow-y: scroll;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around
+}
+.contain::-webkit-scrollbar{
+	width: 4px
+}
+.contain::-webkit-scrollbar-track{
+    background:rgba(1,1,1,.1); 
+}
+.contain::-webkit-scrollbar-thumb{
+    background:rgb(255, 255, 79,.7);
+}
+.user-control {
+    position: relative;
+	margin: 1% .5%;padding: 8px;width:30%;
+	border-radius: 25px;cursor: pointer;
+	background: rgba(255,255,255,.1);
+	transition: .3s ease-in-out;height: 58%;
+	background: #343a40
+}
+.user-control img {
+	width: 90px;height: 90px;
+	border-radius: 50%;
+	border: 1px solid #fff;padding: 4px;margin: auto
+}
+.officer-id, .buttons-controls {
+	color: #fff;margin: 5px 0 ;
+	width: auto;border: none;margin: auto
+}
+
+.officer-id p {
+	padding: 2px;font-variant: small-caps;font-weight: ;
+	margin: 2px
+}
+.user-control button{
+	padding: 5px 10px;border: none;
+	outline: none;background: #fff;border-radius: 4px;
+	font-variant: small-caps;cursor: pointer;
+	transition: .3s ease-in-out;margin: 2px 0;
+}
+.user-control button:hover {
+	background: #fee;transition: .3s ease-in-out
+}
+.icons {
+	position: absolute; top: 15%;right: 5%;padding: 1%;
+}
+.icons i {
+	color: #fff;font-size: 20px;padding: 3px;cursor: pointer;
+	outline: none;
+}
+/**************Officers End ************/
+
+
+
+
+/**************Pannel start ************/
+
+.admin-pannel {
+	padding: 10px;color: #fff;background: #fff;
+}
+.pannel-layer {
+		display: none;
+		height:;overflow: hidden;
+	}
+.admin-pannel > div {
+	padding: 10px;margin: 10px;
+}
+.admin-pannel > div span {
+	color:#333 ;font-variant: small-caps;font-size: 17px;
+}
+.admin-pannel input {
+	border: none;color: #333;
+	border-bottom: 1px solid #ddd;padding: 4px;
+	background: transparent;outline: none; 
+}
+.admin-pannel input[type="email"]{
+	width: 250px
+}
+.admin-pannel input[type="text"]{
+	width: 150px
+}
+
+.admin-pannel input::placeholder {
+	opacity: .5;text-transform: capitalize;
+	font-size: 12px;color: #333
+}
+.custom-select select {
+	border: none;border-radius: 2px;cursor: pointer
+}
+.custom-arrows::after {
+	content: '';display: block;
+	width: 6px;height: 6px;position: absolute;top: 40%;
+	right: 20px;border: 2px solid #aaa;
+	transform: rotate(45deg);border-top: 0;border-left: 0;
+	cursor: pointer;transition: .3S ease-in-out
+}
+.custom-select:hover .custom-arrows::after {
+	top: 45%; transition: .2s ease-in;
+	border-color: gray
+}
+.premission i { margin-right:  10px}
+.create button {
+	border: 1px solid #333;outline: none;padding: 5px 10px;
+	cursor: pointer;background: transparent;
+	font-size: 16px;color: #333;font-variant: small-caps
+}
+.create button i {
+    margin-left: 6px;display: inline-block;
+	transition: .3s ease-out
+}
+.create button:hover i {
+	transform: translateX(4px);
+	transition: .2s ease-in
+}
+/**************Pannel End ************/
+
+/*
+.toggle-icon {
+	width: 25px;height: 15px;background: #fff;
+	border-radius: 20px;display: inline-block;
+	position: relative
+}
+.tog-icon {
+	background: #eee
+}
+.toggle-icon .tog {
+	cursor: pointer;position: absolute;
+	background: #20c997;width: 10px;height: 10px;
+	border-radius: 50%;transform: translate(0,20%);
+	transition: all .3s ease;
+}
+.toggle-icon .toguser  { 
+	cursor: pointer;position: absolute;
+	width: 10px;height: 10px;
+	border-radius: 50%;
+	transition: all .3s ease;
+	transform: translate(-90%,20%);
+	 transition: all .3s ease;background: #d92550
+}
+*/
+
+
+
+/*Set Event start*/
+
+.set-event {
+	padding: 10px;
+	display: none;
+	flex-wrap: wrap;
+	background: #fff;
+	border: 1px solid #ddd;
+	display: block;
+	background-color: #b3b3b3;
+	border: none;
+}
+.set-event > div {
+	margin: 2%
+}
+.set-event span {
+	color: #333;font-variant: small-caps;margin-left: 10px;
+}
+.set-event input {
+	margin:20px 5px;padding: 5px;outline: none;
+	background: transparent;
+	border: 1px solid #3ac47d;color: #333
+}
+.set-event input[type="text"]{
+	border: none;
+	border-bottom: 1px solid #3ac47d
+}
+.set-event input[type="checkbox"] { display: none}
+
+.set-event label {
+  display:block;
+  position: relative;
+  padding-left:25px;
+  font-variant: small-caps;
+  color: #333;
+  cursor: pointer;margin: 10px 5px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+	font-weight: bold
+}
+.set-event input[type="checkbox"] + label:before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #333;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  opacity: 1;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+.set-event input[type="checkbox"]:checked + label:before {
+  width: 6px;
+  top: 0;
+  left: 5px;
+  opacity: 1;
+	border: 1px solid #28a745;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.set-event input[type="checkbox"]:checked + label {
+	color: green
+}
+.set-event > div:nth-child(2) > div {
+	display: none
+}
+.set-event button {
+	outline: none;border: none;
+	padding: 8px 25px;cursor: pointer;
+	font-variant: small-caps;letter-spacing: 4px;
+	bottom;border-radius: 4px;
+	transition: .4s ease-out;
+	font-size: 18px;font-weight: bold;
+	background: linear-gradient(
+-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+background-size: 200% 100%;color: #fff;
+}
+.set-event button:hover {
+	background-size: 400% 100%;
+}
+.set-event .user-control img{
+	border: 1px solid #fff
+}
+.set-event .user-control:hover {
+	background: 
+}
+.set-event .user-control {
+	background: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.premission{position: relative; }
+.taskAcess-id, .approve-access {display: none}
+.premission input[type="checkbox"] { display:none}
+
+.premission label {
+  display:block;
+  position: relative;
+  padding-left:25px;
+  font-variant: small-caps;
+  color: #333;
+  cursor: pointer;margin: 10px 5px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.premission input[type="checkbox"] + label:before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #333;
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  opacity: 1;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+.premission input[type="checkbox"]:checked + label:before {
+  width: 6px;
+  top: 0;
+  left: 150px;
+  opacity: 1;
+	border: 1px solid #333;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+
+
+
+
+
+
+
+/**** Media view *****/
+@media (max-width: 767px) {
+	.user-control {
+		width: 100%
+	}
+}

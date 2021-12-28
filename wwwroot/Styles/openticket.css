@@ -1,0 +1,181 @@
+.ticket-form {
+	padding: 5px;
+	margin: 0 5%;
+	position: relative;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	border-radius: 5px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	color: #333;
+}
+
+	.ticket-form .lay-er {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1
+	}
+
+		.ticket-form .lay-er img {
+			width: 100%;
+			height: 100%;
+		}
+
+	.ticket-form .sender-id {
+		display: flex;
+		padding: 5px
+	}
+
+		.ticket-form .sender-id span {
+			margin: 15px 10px;
+		}
+
+	.ticket-form table {
+		border-radius: 5px;
+		font-size: 12px;
+		border: none;
+		border-collapse: collapse;
+		width: 100%;
+		max-width: 100%;
+		white-space: nowrap;
+		background: #fff;
+		font-variant: small-caps;
+	}
+
+	.ticket-form td, .ticket-form th {
+		font-size: 14px;
+		text-align: center;
+		letter-spacing: 2px;
+		padding: 4px;
+		color: #344;
+	}
+
+	.ticket-form td {
+		color: #d92550
+	}
+
+	.ticket-form .fas {
+		cursor: pointer;
+		color: #20c997
+	}
+
+	.ticket-form .sender-id img {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		padding: 2px;
+		border: 2px solid #fff;
+	}
+
+.ticket-overflow {
+	width: 100%;
+	left: 0;
+	display: none;
+}
+
+.ticket-form p {
+	margin: 5px;
+}
+
+.description, .attached, .chatbox {
+	border: 1px solid #e3e4e6;
+	padding: 10px;
+	margin: 1%;
+	display: inline-block;
+	width: 47.5%;
+}
+
+.chatbox {
+	border: none;
+	width: 100%
+}
+
+
+.chat {
+	margin: 10px;
+	border: none;
+	cursor: pointer;
+	background: transparent;
+	color: #444;
+	letter-spacing: 1px;
+	position: relative;
+	transition: .2s ease-in;
+	font-size: 30px
+}
+
+	.chat:hover {
+		transform: scale(1.2,1.2)
+	}
+
+.chatbox > textarea {
+	outline: none;
+	width: 85%;
+	height: 100%;
+	padding: 6px;
+	border: none;
+	background: transparent;
+	color: #333;
+	border-radius: 2px;
+	border: 1px solid #ddd
+}
+
+	.chatbox > textarea::placeholder {
+		padding: 5px
+	}
+
+.status {
+	position: relative
+}
+
+.status-button {
+	height: 30px;
+	background: transparent;
+	border: none;
+	outline: none;
+	padding: 5px 15px;
+	color: #333;
+	font-variant: small-caps;
+	letter-spacing: 2px;
+	cursor: pointer;
+	margin: 10px;
+}
+
+	.status-button::after {
+		content: '\f078';
+		display: inline-block;
+		font-family: "Font Awesome 5 Free";
+		margin-left: 6px;
+		color: #333;
+		font-size: 8px;
+		font-weight: 900;
+	}
+
+.status-option {
+	display: none;
+}
+
+	.status-option p {
+		font-variant: small-caps;
+		cursor: pointer;
+		color: #455;
+		display: none;
+		margin-left: 20px;
+		font-weight: bold
+	}
+
+		.status-option p:first-child::before, .status-option p:nth-child(2)::before {
+			content: '';
+			width: 6px;
+			height: 6px;
+			display: inline-block;
+			border-radius: 50%;
+			margin-right: 5px;
+			border: 2px solid orange;
+			transform: translate(0%,5%);
+		}
+
+		.status-option p:nth-child(2)::before {
+			border-color: #d92550
+		}

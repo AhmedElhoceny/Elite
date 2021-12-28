@@ -1,0 +1,46 @@
+﻿@model ICollection<Elite.Models.AttendanceViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetAttendanceData</title>
+    <link href="C:\Users\elmo7taref\.nuget\packages\bootstrap\5.1.2\contentFiles\any\any\wwwroot\css\bootstrap.css" rel="stylesheet" />
+    <link href="C:\Users\elmo7taref\.nuget\packages\bootstrap\5.1.2\contentFiles\any\any\wwwroot\css\bootstrap-grid.css" rel="stylesheet" />
+    <link href="C:\Users\elmo7taref\.nuget\packages\bootstrap\5.1.2\contentFiles\any\any\wwwroot\css\bootstrap-reboot.css" rel="stylesheet" />
+    <link href="C:\Users\elmo7taref\.nuget\packages\bootstrap\5.1.2\contentFiles\any\any\wwwroot\css\bootstrap-utilities.css" rel="stylesheet" />
+    <script src="C:\Users\elmo7taref\.nuget\packages\bootstrap\5.1.2\contentFiles\any\any\wwwroot\js\bootstrap.js"></script>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px
+        }
+    </style>
+</head>
+<body style="background-color: #c7c0c0;">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Officer</th>
+                <th scope="col">Working </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var AttendanceItem in Model)
+            {
+                <tr>
+                    <th scope="row">@AttendanceItem.Counter</th>
+                    <td>@AttendanceItem.UserName</td>
+                    <td>@AttendanceItem.WorkingHours : @AttendanceItem.WorkingMinutes : @AttendanceItem.WorkingSeconds Working</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

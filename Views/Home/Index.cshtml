@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Injaz Tickets</title>
+    <link rel="stylesheet" href="~/Styles/main.css">
+    <link rel="shortcut icon" type="image.png" href="~/Images/Logoo.png">
+    <script src="~/Scripts/html5shiv.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+</head>
+<body>
+
+    <!------ header ----------->
+    <!------ log in ----------->
+    <div class="log-div" id="sign-in-div">
+        <div class="log-input">
+            <div>
+                <input id="UserName" type="text" placeholder="user name ?">
+                <input id="PassWord" type="password" placeholder="your password ?">
+                <button onclick="ShowUser()" class="go">go</button>
+                <span class="">forgot?</span>
+            </div>
+        </div>
+    </div>
+    <!------ End log in ----------->
+    <form action="/Home/AddAttendance" method="post" id="MailForm">
+        <input type="hidden" name="UserName" id="UserNamePost" />
+        <input type="hidden" name="Password" id="PassWordPost" />
+    </form>
+
+
+    <script src="~/Scripts/Tickets.js"></script>
+    <script>
+        var ShowUser = () => {
+            var UserName = document.getElementById("UserName").value;
+            var Password = document.getElementById("PassWord").value;
+            document.getElementById("UserNamePost").value = UserName;
+            document.getElementById("PassWordPost").value = Password;
+            document.getElementById("MailForm").submit();
+        }
+    </script>
+</body>
+</html>

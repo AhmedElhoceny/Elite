@@ -1,0 +1,234 @@
+﻿@model Elite.Models.GeneralModelView
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Injaz Tickets</title>
+    <link href="~/Styles/StyleSheet.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Styles/main.css">
+    <link rel="stylesheet" href="~/Styles/openticket.css">
+    <link rel="stylesheet" href="~/Styles/fontaweasome/css/all.min.css">
+    <link rel="shortcut icon" type="image.png" href="~/Images/Logoo.png">
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/CommentHub")
+            .build();  
+
+        connection.on("RecieveCooment", (TaskTitle, CommentContent, SendFrom) => {
+            var TheParentTask = document.getElementById(TaskTitle);
+            if (TheParentTask != null) {
+                var AppendedChild = document.createElement("div");
+                AppendedChild.className = "commen";
+                var ChildH4 = document.createElement("h4");
+                ChildH4.innerText = SendFrom + ' : ' + CommentContent;
+                AppendedChild.append(ChildH4);
+                TheParentTask.querySelector(".ticket-overflow #discussion").append(AppendedChild);
+            }
+        });
+
+        connection.start().then(function () { console.log("Connecting ....") }).catch(err => console.error(err.toString()));  
+
+        var GoToDashBoard = () => {
+            var UserName = document.getElementById("ClientUserName").value;
+            var Password = document.getElementById("ClienPassWord").value;
+            document.getElementById("UserName").value = UserName;
+            document.getElementById("PassWord").value = Password;
+            document.getElementById("HiddenForm").submit();
+        }
+        let LogOut = () => {
+            window.location.href = "/Home/SignOut?UserId=@Model.User.id"
+        }
+        function taskDetails() {
+            $(".ticket-overflow").slideToggle("fast")
+            $(".fas").toggleClass("fa-arrow-up")
+        }
+        function ticketStatus() {
+
+            $(".status-option").slideToggle("fast")
+            $(".status-option p").fadeToggle("slow")
+            $(".ticket-overflow").children.fadeToggle("slow")
+        }
+        var AddComment = (element) => {
+            var CommentContent = element.parentElement.querySelector("#TaskComment").value;
+            var TaskTitle = element.parentElement.querySelector(".TaskTitle2").value;
+            fetch("/Home/AddCommentToTask?CommentContent=" + CommentContent + "&TaskTitle=" + TaskTitle + "&UserName=" + document.getElementById("ClientUserName").value)
+                .then(res => console.log(res.text()))
+        }
+
+    </script>
+</head>
+<body>
+
+    <!------ header ----------->
+    <header>
+        <div class="id">
+            <img src="~/Images/Profile.jpg">
+        </div>
+        <ul>
+            <li><i class="far fa-bell"></i></li>
+            <li><i class="fas fa-search"></i></li>
+        </ul>
+    </header>
+    <!------End header ----------->
+    <!------End header ----------->
+    <input type="hidden" id="ClientUserName" value="@Model.User.UserName" />
+    <input type="hidden" id="ClienPassWord" value="@Model.User.Password" />
+    <!------ Search ----------->
+    <!------ Search ----------->
+    <div class="search-holder" id="s-holder">
+        <form>
+            <input type="text" class="search" id="search-input" placeholder="look at tickets history">
+            <button class="find">find it</button>
+        </form>
+    </div>
+    <!------ HiddenEncryptionForm ------->
+    <form style="display:none" action="/Home/LogInPost" id="HiddenForm">
+        <input type="hidden" name="UserNmae" id="UserName" />
+        <input type="hidden" name="Password" id="PassWord" />
+    </form>
+    <!----------------------------------->
+    <!------ End Search ----------->
+    <! –– left bar -->
+    <div class="left">
+        <ul class="main-ul">
+            <li onclick="GoToDashBoard()"><i class="fas fa-home"></i>dashboard</li>
+            <li onclick="LogOut()"><i class="fa fa-sign-out-alt "></i>sign out</li>
+        </ul>
+        <div class="timer">
+            <span>@ViewBag.SignUpTime</span>
+        </div>
+    </div>
+
+    <!-----------------------Medium parent----------------->
+    <div class="medium" id="toggle">
+        <div style="margin-bottom:30px">
+            <div class="dash" style="position: relative;">
+                <p>total tasks</p>
+                <h1>@ViewBag.TotalTask</h1>
+                <div>
+                    <ul>
+                        <li>daily</li>
+                        <li>@ViewBag.TotaldailyTask </li>
+                    </ul>
+                    <ul>
+                        <li>longterm</li>
+                        <li>@ViewBag.TotallongtermTask </li>
+                    </ul>
+                    <ul>
+                        <li>supportive</li>
+                        <li>@ViewBag.TotalsupportiveTask</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="InprogressTasks" class="dash">
+                <p>opening</p>
+                <h1>@ViewBag.TotalInProgressTask</h1>
+            </div>
+            <div id=" ClosedTasks" class="dash">
+                <p>closed</p>
+                <h1>@ViewBag.TotalClosedTask</h1>
+            </div>
+        </div>
+        <!---------ticket form parent------->
+        @if (Model.UserTasks.Count != 0)
+        {
+            foreach (var UserTasksItem in Model.UserTasks)
+            {
+                <div class="ticket-form" id="@UserTasksItem.TaskTitle">
+
+                    <div class="sender-id">
+                        <img src="../Images/Profile.jpg">
+                    </div>
+                    <table class="">
+                        <thead>
+                            <tr>
+                                <th>task title</th>
+                                <th>task type</th>
+                                <th>platform</th>
+                                <th>client</th>
+                                <th>deadline</th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+
+                        <thead>
+                            <tr>
+                                <td>@UserTasksItem.TaskTitle</td>
+                                <td>@UserTasksItem.TaskType</td>
+                                <td>@UserTasksItem.EndDate</td>
+                                <td>@UserTasksItem.TaskState</td>
+                                <td onclick="taskDetails()"><i class="fas fa-arrow-down" name="more"></i></td>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div class="ticket-overflow">
+
+                        <div class="description">
+                            <p>@UserTasksItem.TaskDiscription</p>
+                        </div>
+                        <div class="attached"></div>
+                        <div class="chatbox">
+                            <textarea placeholder="Type a comment here.." name="msg" id="TaskComment"></textarea>
+                            <input type="hidden" class="TaskTitle2" value="@UserTasksItem.TaskTitle" />
+                            <button onclick="AddComment(this)" class="chat far fa-comment-dots"></button>
+                        </div>
+                        @if (Model.TaskComments.Count != 0)
+                        {
+                            <div id="discussion">
+                                @foreach (var CommentItem in Model.TaskComments.Where(x => x.TaskTitle == UserTasksItem.TaskTitle).ToList())
+                                {
+                                <div class="commen">
+                                    <h4 style="font-weight: initial;">
+                                        @CommentItem.fromUserUserName : @CommentItem.CommentContent
+                                        @CommentItem.CommentTime
+                                    </h4>
+                                </div>
+                                }
+                            </div>
+                           
+                        }
+
+
+                        <div class="status">
+                            <button class="status-button" onclick="ticketStatus()">status</button>
+                            <div class="status-option" id="status-button">
+                                <input type="hidden" id="TaskTitle" value="@UserTasksItem.TaskTitle" />
+                                <p onclick="ChangeProcessState('InProgress',this)">in progress</p>
+                                <p onclick="ChangeProcessState('Closed' , this)">closed</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        }
+
+
+        <!-------End Ticket form parent------->
+        <!----------Ticket status button-------->
+        <!-----------End ticket status button---------->
+
+
+    </div>
+
+
+
+
+    <!----------------End Medium parent---------->
+
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/Tickets.js"></script>
+</body>
+</html>

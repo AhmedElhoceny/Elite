@@ -1,0 +1,36 @@
+.approve {
+	height: ;display: flex;
+	flex-direction: column
+}
+	.approve > div {
+		margin: 2.5% 5%;
+		background: rgba(222, 220, 220, 0.8);
+		display: flex;
+		padding: 5px;
+		justify-content: space-around;
+		border-radius: 6px;
+	}
+.approve > div img {
+	width: 50px;height: 50px;border-radius: 50%;
+	margin: auto;display: block
+}
+.approve span, .approve p {
+	margin: ;font-variant: small-caps;
+	text-align: center;font-weight: bold
+}
+.approve span {font-weight: normal}
+.approve button {
+	height: 25px;margin: auto 0;padding:0 10px;
+	cursor: pointer;border: 1px solid #ddd;
+	font-variant: small-caps;position: relative;
+	 background: linear-gradient(to right, #23d5ab 0%, #23a6d5 0%, #e73c7e 50%, #ee7752 50%,  rgba(255,255,255,0) 50%);
+    background-size: 200% 100%;background-position: left bottom;color: #fff
+}
+.approve button .fas {font-size: 10px}
+.approve button .action {
+	background: #fff;position: absolute;top: 100%;left: 0;padding:4px;display: none;z-index: 99
+}
+.approve button .action p {
+	margin: 4px 0; padding: 4px 0;color: #333
+}
+.approve button p {font-weight: normal}

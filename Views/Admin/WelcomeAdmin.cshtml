@@ -1,0 +1,549 @@
+﻿@model ICollection<Elite.Models.User>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Injaz Tickets</title>
+    <link rel="stylesheet" href="~/Styles/main.css">
+    <link rel="stylesheet" href="~/Styles/admin.css">
+    <link rel="stylesheet" href="~/Styles/fontaweasome/css/all.min.css">
+    <link rel="shortcut icon" type="image.png" href="~/Images/Logoo.png">
+    <script src="~/Scripts/html5shiv.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <script src="~/Scripts/jquery.js"></script>
+
+    <style>
+        .UsersContainrt {
+            width: 229px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-top: 10px;
+            background-color: rgb(179, 179, 179);
+            border-radius: 5px;
+            border: 1px #fff solid;
+            overflow-y: auto;
+        }
+
+            .UsersContainrt p {
+                color: #fff;
+                font-size: 16px;
+                margin-left: 10px;
+                margin-top: 10px;
+                text-decoration: underline;
+                cursor: pointer
+            }
+    </style>
+</head>
+<body>
+    <div onclick="document.getElementById('ResponseDivDone').style.top = '-100%'" id="ResponseDivDone" style="width: 253px;
+        height: 129px;
+        position: absolute;
+        top: -100%;
+        left: 40%;
+        text-align: center;
+        border-radius: 10px;
+        border: medium none;
+        background-color: rgba(89, 241, 34, 0.83);
+        color: rgb(255, 255, 255);
+        transition: top 0.5s ease-in-out 0s;
+        z-index: 5;
+
+    ">
+        <h3 style="margin-top: 11%; font-size: 43px;">Done ;)</h3>
+    </div>
+    <div onclick="document.getElementById('ResponseDivFailed').style.top = '-100%'" id="ResponseDivFailed" style="width: 253px; height: 129px; position: absolute; top: -100%; left: 40%; text-align: center; border-radius: 10px; border: medium none; background-color: rgba(241, 34, 34, 0.83); color: rgb(255, 255, 255); transition: top 0.5s ease-in-out 0s; z-index: 5;">
+        <h3 style="margin-top: 11%; font-size: 43px;">Failed :(</h3>
+    </div>
+
+    <form id="EditForm" style="transition:top 0.5s ease-in-out;position: absolute; top: -100%; z-index: 5; display: flex; flex-direction: column; background-color: #ddd; width: 300px; left: 41%; height: 41px; justify-content: space-around; height: 255px; border-radius: 17px;" action="/Admin/EditUser" method="post">
+        <input type="hidden" name="UserName" id="UserName" />
+        <input style="width: 80%; align-self: center; height: 34px; border-radius: 7px; border: none; padding: 14px;" type="email" name="Email" placeholder="Email...." />
+        <select name="UserTeam" style="width: 80%; align-self: center; border-radius: 7px; border: none; padding: 14px; height: 50px; cursor: pointer;">
+            <option value="" selected disabled hidden>Select Team</option>
+            <option value="youtube">youtube</option>
+            <option value="social">social</option>
+            <option value="digital">digital</option>
+            <option value="development">development</option>
+            <option value="aqusation">aqusation</option>
+        </select>
+        <select name="UserPosition" style="width: 80%;
+            align-self: center;
+            border-radius: 7px;
+            border: none;
+            padding: 14px;
+            height: 50px;
+            cursor: pointer;">
+            <option value="" selected disabled hidden>Select Position</option>
+            <option value="manager">manager</option>
+            <option value="team_leader">team leader</option>
+            <option value="senior">senior</option>
+            <option value="junior">junior</option>
+            <option value="internship">internship</option>
+        </select>
+        <div style="width:100%;height:40px;display:flex;flex-direction:row;justify-content:space-around;">
+            <button style="width: 114px; height: 30px; background-color: #74ff00; border: none;align-self:center; color: #fff; font-size: 22px; border-radius: 9px; cursor: pointer;" type="submit">Edit</button>
+            <button onclick="CloseEditUser()" style="width: 114px; height: 30px; background-color: #74ff00;align-self:center ;border: none; color: #fff; font-size: 22px; border-radius: 9px; cursor: pointer;" type="button">Close</button>
+        </div>
+
+    </form>
+    <!--	Header-->
+    <header>
+        <div class="logo">
+            <img src="~/Images/Logoo.png">
+            <span id="sign-in">welcome,</span>
+        </div>
+
+        <ul>
+            <li><i class="far fa-bell"></i></li>
+            <li onclick="createUser()"><i class="fas fa-user-plus"></i></li>
+            <li onclick="window.location.href='/Home/Index'"><i class="fas fa-sign-out-alt"></i></li>
+        </ul>
+
+    </header>
+    <!--	 	Header-->
+    <! –– left bar -->
+    <div class="left">
+        <ul class="main-ul">
+            <li><i class="fas fa-home"></i>main</li>
+            <li class="l-open" onclick="showUsers()">
+                <i class="fab fa-openid"></i>
+                users
+            </li>
+            <li class="l-open">
+                <i class="fab fa-openid"></i>attendance
+            </li>
+            <ul class="x-ul">
+                <li onclick="window.location.href = '/Admin/GetAttendanceData'" style="cursor:pointer">Working Hours</li>
+            </ul>
+        </ul>
+
+    </div>
+    <!--End left-->
+
+
+
+    <div class="medium" id="toggle" style="background-image: url(../Images/Background10.jpeg); background-size: cover; background-position-y: center;">
+
+        <div class="pannel-layer" id="lay">
+
+            <!--			 Admin panael-->
+            <div class="admin-pannel">
+                <div>
+                    <span>first name :</span>
+                    <input type="text" placeholder="officer first name" id="FirstName">
+                    <span>last name :</span>
+                    <input type="text" placeholder="officer last name" id="LastName">
+                </div>
+                <div>
+                    <span>team :</span>
+                    <span>youTube</span>
+                    <input type="radio" name="team" value="youTube">
+                    <span>social</span>
+                    <input type="radio" name="team" value="social">
+                    <span>digital</span>
+                    <input type="radio" name="team" value="digital">
+                    <span>development</span>
+                    <input type="radio" name="team" value="development">
+                    <span>aqusation</span>
+                    <input type="radio" name="team" value="aqusation">
+                </div>
+                <div class="custom-select" style="width:200px;">
+                    <select id="Position">
+                        <option value="0" disabled selected>Select a position:</option>
+                        <option value="manager">manager</option>
+                        <option value="team_leader">team leader</option>
+                        <option value="senior">senior</option>
+                        <option value="junior">junior</option>
+                        <option value="internship">internship</option>
+                    </select>
+                    <span class="custom-arrows"></span>
+                </div>
+
+                <div>
+                    <span>email :</span>
+                    <input type="email" placeholder="FX/...gmail.com" id="UserEmail">
+                    <span>password :</span>
+                    <input type="password" placeholder="set a password" id="UserPassWord">
+                </div>
+                <div class="premission">
+                    <input type="checkbox" value="false" id="task-access">
+                    <label for="task-access" onclick="taskAcess()">
+                        view tasks
+                        <i class="far fa-eye-slash"></i>
+                    </label>
+                    <div class="taskAcess-id" id="TaskAccessOn">
+                        <span>type a name :</span>
+                        <input type="text" onkeypress="SearchUserByUserName(this)">
+                        <p style="color: #838282; font-size: 18px; display: contents; font-style: oblique; font-family: initial;" id="UserPermissionsDisabledField" class="TaskAccessUserPermissions"></p>
+                        <button onclick="ClearUses(this)" style="width: 158px; height: 38px; color: #fff; background-color: #ea4a4a; border: none; border-radius: 9px;cursor: pointer;">Clear Permissions</button>
+                    </div>
+
+                    <input type="checkbox" value="false" id="premission">
+                    <label for="premission" onclick="approveAccess()">
+                        approving
+                        <i class="far fa-calendar-check"></i>
+                    </label>
+                    <div class="approve-access" id="RequestAccessOn">
+                        <span>type a name :</span>
+                        <input type="text" onkeypress="SearchUserByUserName(this)">
+                        <p style="color: #838282; font-size: 18px; display: contents; font-style: oblique; font-family: initial;" id="UserPermissionsDisabledField" class="RequestAccessUserPermissions"></p>
+                        <button onclick="ClearUses(this)" style="width: 158px; height: 38px; color: #fff; background-color: #ea4a4a; border: none; border-radius: 9px;cursor: pointer;">Clear Permissions</button>
+                    </div>
+                </div>
+
+                <div class="create">
+                    <button onclick="CreateNewUser()">create<i>&rarr;</i></button>
+                </div>
+            </div>
+        </div>
+
+        <!--	 End admin pannel-->
+        <!------------Officers start------------>
+
+        <div class="users">
+            <!------------ Filter--------->
+            <div class="filter-button">
+                <h3 onclick="showFilter(this)"><i class="fas fa-filter"></i><span>filter</span></h3>
+            </div>
+
+            <input style="width: 210px; height: 33px; border-radius: 4px; border: 1px solid #eee; padding: 10px; margin: auto; position: relative; left: 16%;" type="text" placeholder="User Name....." onkeydown="FilterName(this)" />
+
+            <select onchange="FilterSelectPosition(this)" style="width: 152px; display: inline-block; position: relative; left: 29%; height: 34px; background-color: #fff; border: none; border-radius: 6px;">
+                <option value="All">All</option>
+                <option value="CEO">CEO</option>
+                <option value="HR">HR</option>
+                <option value="LegalCorporate">LegalCorporate</option>
+                <option value="TeamLeader">TeamLeader</option>
+                <option value="Manager">Manager</option>
+                <option value="Senior">Senior</option>
+                <option value="Junior">Junior</option>
+            </select>
+            <!------------ Filter End--------->
+
+            <div class="contain container">
+                @foreach (var UserItem in Model)
+                {
+                    <div class="user-control">
+                        <div>
+                            <img src="~/Images/Profile.jpg">
+                        </div>
+                        <div class="officer-id">
+                            <p class="FullName">@UserItem.UserName</p>
+                            <p>@UserItem.Position</p>
+                            <button onclick="EditUser(this)">edit</button>
+                            <button onclick="RemoveUser(this)">remove</button>
+                            <button onclick="ShowTasks(this)">ShowTasks</button>
+                        </div>
+                        <div class="icons">
+                            <i onclick="togggleUser(this)" class="">
+                                <div class="toggle-icon">
+                                    <span class="tog"></span>
+                                </div>
+                            </i>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!------------Officers End------------>
+       
+
+        <!------------Event End------------>
+        <!------------End Medium------------>
+    </div>
+    <!------------End Medium------------>
+
+    <script>
+
+        function showUsers() {
+            $(".users").fadeToggle("slow")
+            $(".pannel-layer").slideUp("slow")
+            $(".set-event").slideUp("slow")
+
+        }
+        function createUser() {
+            $(".pannel-layer").slideToggle("slow")
+            $(".users").fadeOut("slow")
+            $(".set-event").slideUp("slow")
+        }
+        $(".set-event").slideUp("slow")
+        function setEvent() {
+            $(".set-event").slideToggle("slow")
+            $(".users").fadeOut("slow")
+            $(".pannel-layer").fadeOut("slow")
+        }
+        let taskAcess = () => {
+            $("#TaskAccessOn").fadeToggle("slow")
+        }
+        let approveAccess = () => {
+
+            $("#RequestAccessOn").fadeToggle("slow")
+        }
+
+        let SearchUserByUserName = (element) => {
+            element.parentElement.querySelectorAll(".UsersContainrt").forEach(x => {
+                element.parentElement.removeChild(x);
+            })
+            var UsersName = [];
+            fetch("/Home/GetUserBuName?UserName=" + element.value)
+                .then(res => {
+                    res.text().then(data => {
+                        UsersName = data.split('-');
+                        var UsersContainrt = document.createElement("div");
+                        UsersContainrt.className = "UsersContainrt";
+                        UsersName.forEach(userNameItem => {
+                            var Userparagraph = document.createElement("p");
+                            Userparagraph.innerText = userNameItem;
+                            Userparagraph.addEventListener("click", function (e) {
+                                element.parentElement.querySelector("#UserPermissionsDisabledField").innerText += e.target.innerText + '-';
+                            })
+                            UsersContainrt.append(Userparagraph);
+                        })
+                        element.parentElement.append(UsersContainrt);
+                    })
+                })
+        }
+
+        let CreateNewUser = () => {
+            var FirstNameField = document.getElementById("FirstName");
+            var LastNameField = document.getElementById("LastName");
+            const rbs = document.querySelectorAll('input[name="team"]');
+            var selectedValue;
+            for (const rb of rbs) {
+                if (rb.checked) {
+                    selectedValue = rb.value;
+                    break;
+                }
+            }
+            var Position = document.getElementById("Position");
+            var EmailField = document.getElementById("UserEmail");
+            var PassWordField = document.getElementById("UserPassWord");
+
+            fetch("/Admin/AddUser?FirstName=" + FirstNameField.value + "&LastName=" + LastNameField.value + "&Team=" + selectedValue + "&Position=" + Position.value + "&Email=" + EmailField.value + "&PassWord=" + PassWordField.value)
+                .then(res => 
+                    res.text().then(data => {
+                    console.log(data)
+                    if (data == "Done") {
+                        document.getElementById("ResponseDivDone").style.top = "30%";
+                        document.getElementById("ResponseDivFailed").style.top = "-100%";
+                        window.location.href = "/Admin/WelcomeAdmin"
+                    } else {
+                        document.getElementById("ResponseDivDone").style.top = "-100%";
+                        document.getElementById("ResponseDivFailed").style.top = "30%";
+                    }
+                }))
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Admin/AddUser?UserData",
+            //    data: UserData,
+            //    success: function (data) {
+            //        if (data == "Done") {
+            //            document.getElementById("ResponseDivDone").style.top = "30%";
+            //            document.getElementById("ResponseDivFailed").style.top = "-100%";
+            //            window.location.href = "/Home/ShowUsers"
+            //        } else {
+            //            document.getElementById("ResponseDivDone").style.top = "-100%";
+            //            document.getElementById("ResponseDivFailed").style.top = "30%";
+            //        }
+            //    }
+            //});
+            
+        }
+        let ClearUses = (ele) => {
+            ele.parentElement.querySelector("#UserPermissionsDisabledField").innerText = "";
+            ele.parentElement.removeChild(ele.parentElement.querySelector(".UsersContainrt"));
+            ele.parentElement.querySelector("input").value = "";
+        }
+        let ShowTasks = (ele) => {
+            window.location.href = "/Admin/ShowOfficersDataTasks?OfficerName=" + ele.parentElement.querySelector(".FullName").innerText
+        }
+
+        let EditUser = (ele) => {
+            document.getElementById("UserName").value = ele.parentElement.querySelector(".FullName").innerText;
+            document.getElementById("EditForm").style.top = "30%";
+        }
+        let RemoveUser = (ele) => {
+            window.location.href = "/Home/RemoveUser?UserName=" + ele.parentElement.querySelector(".FullName").innerText;
+        }
+        let CloseEditUser = () => {
+            document.getElementById("EditForm").style.top = "-100%";
+        }
+        function specifiedUser() {
+            $(".specified-user").slideToggle("fast")
+        }
+        let GetUserByNmae = (ele) => {
+            ele.parentElement.querySelectorAll(".UsersContainrt").forEach(x => {
+                ele.parentElement.removeChild(x);
+            })
+            var UsersName = [];
+            fetch("/Home/GetUserBuName?UserName=" + ele.value)
+                .then(res => {
+                    res.text().then(data => {
+                        UsersName = data.split('-');
+                        var UsersContainrt = document.createElement("div");
+                        UsersContainrt.className = "UsersContainrt";
+                        UsersName.forEach(userNameItem => {
+                            var Userparagraph = document.createElement("p");
+                            Userparagraph.innerText = userNameItem;
+                            Userparagraph.addEventListener("click", function (e) {
+                                ele.parentElement.querySelector("#InviteSpecificUser").innerText = e.target.innerText ;
+                            })
+                            UsersContainrt.append(Userparagraph);
+                        })
+                        ele.parentElement.append(UsersContainrt);
+                    })
+                })
+        }
+        let ClearUsesEvent = (ele) => {
+            ele.parentElement.querySelector("p").innerText = "";
+            ele.parentElement.querySelector("input").value = "";
+            ele.parentElement.removeChild(ele.parentElement.querySelector(".UsersContainrt"));
+        }
+        let InviteEvent = () => {
+            var EventData = {
+                EventDate: document.getElementById("EventDate").value,
+                EventTime: document.getElementById("EventTime").value,
+                EventArea: document.getElementById("EventArea").value,
+                EventReason: document.getElementById("EventReason").value,
+                EventRequires: document.getElementById("EventRequires").value,
+                set1: document.getElementById("set1").checked,
+                set2: document.getElementById("set2").checked,
+                InviteSpecificUser: document.getElementById("InviteSpecificUser").innerText,
+                set3: document.getElementById("set3").checked,
+                set4: document.getElementById("set4").checked,
+                set5: document.getElementById("set5").checked
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Home/InviteEvent",
+                data: EventData,
+                success: function (data) {
+                    if (data == "Done") {
+                        document.getElementById("ResponseDivDone").style.top = "30%";
+                        document.getElementById("ResponseDivFailed").style.top = "-100%";
+                    } else {
+                        document.getElementById("ResponseDivDone").style.top = "-100%";
+                        document.getElementById("ResponseDivFailed").style.top = "30%";
+                    }
+                }
+            });
+        }
+        document.querySelectorAll('input[type=checkbox]').forEach(x => {
+            x.checked = false
+        })
+        let FilterSelectTaskType = (element) => {
+
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".team>p:first-child").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else if (element.value == "All") {
+                    document.querySelectorAll(".user-control").forEach(ele => {
+                        ele.classList.add("Visible");
+                    })
+                }
+                else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+
+        let FilterSelectPosition = (element) => {
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".officer-id p:nth-child(2)").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else if (element.value == "All") {
+                    document.querySelectorAll(".user-control").forEach(ele => {
+                        ele.classList.add("Visible");
+                    })
+                }
+                else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+        document.querySelectorAll(".user-control").forEach(ele => {
+            ele.querySelector("div>img").onclick = (e) => {
+                document.querySelectorAll(".container>div").forEach(elem => {
+                    elem.classList.remove("Selected");
+                    elem.classList.add("NotSelected");
+                })
+                e.target.parentElement.parentElement.classList.add("Selected");
+                e.target.parentElement.parentElement.classList.remove("NotSelected");
+                SelectedPersonName = document.querySelector(".Selected").querySelector(".officer-id p").textContent;
+                document.querySelectorAll(".NotSelected").forEach(Y => {
+                    Y.style.display = "none";
+                })
+                document.querySelectorAll(".Selected").forEach(Y => {
+                    console.log(Y)
+                    Y.style.display = "block";
+                    Y.parentElement.parentElement.style.height = "auto"
+                })
+
+            }
+        })
+        let FilterName = (element) => {
+            if (element.value == "") {
+                document.querySelectorAll(".user-control").forEach(ele => {
+                    ele.classList.remove("Visible");
+                    ele.classList.remove("Hidden");
+                })
+            }
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".officer-id p:first-child").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+    </script>
+    <script src="js/jquery.js"></script>
+    <script src="js/Tickets.js"></script>
+</body>
+</html>

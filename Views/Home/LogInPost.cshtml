@@ -1,0 +1,721 @@
+﻿@model Elite.Models.GeneralModelView
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Injaz Tickets</title>
+    <link rel="stylesheet" href="~/Styles/main.css">
+    <link rel="stylesheet" href="~/Styles/fontaweasome/css/all.min.css">
+    <link rel="shortcut icon" type="image.png" href="~/Images/Logoo.png">
+    <link href="~/Styles/Notofication.css" rel="stylesheet" />
+
+    <script src="~/Scripts/html5shiv.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+
+    <script src="~/Scripts/Notifications.js"></script>
+
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+    <style>
+
+        .ChangePassword {
+            position: absolute;
+            width: 347px;
+            height: 240px;
+            left: 40%;
+            top: -100%;
+            border: none;
+            border-radius: 10px;
+            transition: top 0.3s linear;
+            background-color: #343a40d4;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: space-around;
+        }
+
+        .ChangePassword2 {
+            position: absolute;
+            width: 347px;
+            height: 240px;
+            left: 40%;
+            top: -100%;
+            border: none;
+            border-radius: 10px;
+            transition: top 0.3s linear;
+            background-color: #343a40d4;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: space-around;
+        }
+
+        .password {
+            align-self: center;
+            width: 70%;
+            height: 36px;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .ChangePasswordButton {
+            width: 40%;
+            align-self: center;
+            height: 29px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #007cff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <form class="ChangePassword">
+        <input type="password" class="form-control password" placeholder="CurrentPassword..." id="CurrentPassword" />
+        <input type="password" class="form-control password" placeholder="NewPassword..." id="NewPassword" />
+        <input type="password" class="form-control password" placeholder="ConfirmNewPassword..." id="ConfirmNewPassword" />
+        <button class="ChangePasswordButton" onclick="ChangePasswordSubmit()" type="button">Submit</button>
+    </form>
+    <form class="ChangePassword2">
+        <input type="text" class="form-control password" placeholder="Confirm Code..." id="ConfirmCode" />
+        <button class="ChangePasswordButton" onclick="ConfirmPasswordSubmit()" type="button">Submit</button>
+    </form>
+    <!------ header ----------->
+    <header>
+        <ul>
+            <li id="search-btn" onclick="showSearch()"><i class="fas fa-search"></i></li>
+        </ul>
+        @foreach (var NotificationsItem in Model.MyNotifications)
+        {
+            <div class="alert">
+                <input type="hidden" value="@NotificationsItem.id" class="NotificationId" />
+                <span class="closebtn" onclick="DeleteNotification(this)">&times;</span>
+                @NotificationsItem.Message
+            </div>
+        }
+    </header>
+    <!------End header ----------->
+    <!------ Search ----------->
+    <div class="search-holder" id="s-holder">
+        <form>
+            <input type="text" class="search" id="search-input" placeholder="look at tickets history">
+            <button class="find">find it</button>
+        </form>
+    </div>
+    <input type="hidden" value="@Model.User.id" id="UserLoggedId" />
+    <input type="hidden" value="@ViewBag.InprogressTasksPercentage" id="InprogressTasksPercentage" />
+    <input type="hidden" value="@ViewBag.ClosedTasksPercentage" id="ClosedTasksPercentage" />
+    <input type="hidden" value="@ViewBag.InprogressTasks" id="InprogressTasks" />
+    <input type="hidden" value="@ViewBag.ClosedTasks" id="ClosedTasks" />
+    <input type="hidden" value="@Model.User.Email" id="UserEmail" />
+    <!------ End Search ----------->
+    <! –– left bar -->
+    <div class="left">
+        <ul class="main-ul">
+            <li onclick="ShowDashBoard()"><i class="fas fa-home"></i>dashboard</li>
+            <li class="l-open" onclick="ShowDashBoard()">
+                <i class="fab fa-openid"></i>ticket
+            </li>
+            <ul class="x-ul">
+                <li onclick="FadeOutText()">create</li>
+                <li onclick="ShowTasks('New')">todo's</li>
+                <li onclick="ShowTasks('InProgress')">in progress</li>
+                <li onclick="ShowTasks('Closed')">closed</li>
+                <li onclick="ShowTasks('Sent')">sent</li>
+            </ul>
+            <li onclick="ChangePassword()"><i class="fas fa-key"></i>password</li>
+            <li onclick="LogOut()"><i class="fa fa-sign-out-alt "></i>sign out</li>
+        </ul>
+    </div>
+    <div class="medium" id="toggle" onclick="document.querySelector('.ChangePassword').style.top = '-100%'">
+        <! -----------dashboard----------- >
+        <div class="dashboard">
+            <div>
+                <div class="dash" style="position: relative;">
+                    <p>total tasks</p>
+                    <h1>@Model.UserTasks.Count()</h1>
+                    <div>
+                        <ul>
+                            <li>daily</li>
+                            <li>@ViewBag.AllDailyTasks </li>
+                        </ul>
+                        <ul>
+                            <li>longterm</li>
+                            <li>@ViewBag.AlllONGtERMTasks</li>
+                        </ul>
+                        <ul>
+                            <li>supportive</li>
+                            <li>@ViewBag.AllSupportiveTasks</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="InprogressTasks" class="dash">
+                    <p>opening</p>
+                    <h1>@ViewBag.InprogressTasks</h1>
+                </div>
+                <div id=" ClosedTasks" class="dash">
+                    <p>closed</p>
+                    <h1>@ViewBag.ClosedTasks</h1>
+                </div>
+            </div>
+            <!--		 progress-->
+            <div>
+                <div class="progress">
+
+                    <h4>daily <span style="color: #ddd; font-variant: small-caps; font-size: 12px;">@(ViewBag.DilyStatistics)%</span> </h4>
+                    <div class="meter cadetblue">
+                        <span data-progress="@ViewBag.DilyStatistics" style="width:0;"></span>
+                    </div>
+
+                    <h4>assigned <span style="color: #ddd; font-variant: small-caps; font-size: 12px;">@(ViewBag.LongTermStatistics)%</span> </h4>
+                    <div class="meter red">
+                        <span data-progress="@ViewBag.LongTermStatistics" style="width:0;"></span>
+                    </div>
+
+                    <h4>supportive <span style="color: #ddd; font-variant: small-caps; font-size: 12px;">@(ViewBag.SupportiveStatistics)%</span> </h4>
+                    <div class="meter orange">
+                        <span data-progress="@ViewBag.SupportiveStatistics" style="width:0;"></span>
+                    </div>
+                </div>
+
+            </div>
+            <table class="ongoing">
+                <thead>
+                    <tr>
+                        <th>task</th>
+                        <th>deadline</th>
+                        <th>team</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.UserTasks.Count != 0)
+                    {
+                        foreach (var TaskItem in Model.UserTasks)
+                        {
+                            <tr>
+                                <td>@TaskItem.TaskTitle</td>
+                                <td>@TaskItem.EndDate</td>
+                                @if (TaskItem.TaskState == "New")
+                                {
+                                    <td><span class="status-green">New</span></td>
+                                }
+                                else if (TaskItem.TaskState == "InProgress")
+                                {
+                                    <td><span class="status-orange">In Process</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="status-orange">Closed</span></td>
+                                }
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>------</td>
+                            <td>------</td>
+                            <td>------</td>
+                            <td><span class="status-green">------</span></td>
+                        </tr>
+                    }
+
+
+                <tbody>
+            </table>
+        </div>
+        <! ---------------End dashboard----------- >
+
+
+        <! -----–-------– Open a ticket  --------------- >
+
+
+        <div class="ticket-create" style="display: none">
+            <h3><i class="fas fa-users"></i><span>select officer</span></h3>
+
+            <input style="width: 210px; height: 33px; border-radius: 4px; border: 1px solid #eee; padding: 10px; margin: auto; position: relative; left: 16%;" type="text" placeholder="User Name....." onkeydown="FilterName(this)" />
+            <select onchange="FilterSelectTaskType(this)" style="width: 152px; display: inline-block; position: relative; left: 22%; height: 34px; background-color: #fff; border: none; border-radius: 6px;">
+                <option value="All">All</option>
+                <option value="Accountant">Accountant</option>
+                <option value="digital">digital</option>
+                <option value="creative">creative</option>
+                <option value="social">social</option>
+                <option value="youTube">youTube</option>
+                <option value="aqu">aqu</option>
+                <option value="Developer">Developer</option>
+            </select>
+            <select onchange="FilterSelectPosition(this)" style="width: 152px; display: inline-block; position: relative; left: 29%; height: 34px; background-color: #fff; border: none; border-radius: 6px;">
+                <option value="All">All</option>
+                <option value="CEO">CEO</option>
+                <option value="HR">HR</option>
+                <option value="LegalCorporate">LegalCorporate</option>
+                <option value="TeamLeader">TeamLeader</option>
+                <option value="Manager">Manager</option>
+                <option value="Senior">Senior</option>
+                <option value="Junior">Junior</option>
+            </select>
+            <div>
+                <div class="more" onclick="overFlow(this)">
+                    <i class="fas fa-expand-alt"></i>
+                </div>
+                <div class="container">
+                    @foreach (var UserItem in Model.AllUsers.ToList())
+                    {
+
+                        <div class="user-control">
+                            <div>
+                                <img src="~/Images/Profile.jpg">
+                            </div>
+                            <div class="officer-id">
+                                <p>@UserItem.UserName</p>
+                                <p>@UserItem.Position</p>
+                                <div class="assign-officer">
+                                    <p>
+                                        assign<i class="fas fa-arrow-right"></i>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="team">
+                                <p>@UserItem.Team</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="ticket">
+                <div class="split">
+
+                    <span class="select-title">client:</span>
+                    <div class="custom-select">
+                        <input type="radio" name="img" id="client1">
+                        <input type="radio" name="img" id="client2">
+                        <input type="radio" name="img" id="client3">
+                        <input type="radio" name="img" id="client4">
+                        <! --- officer navs inputs ---!>
+
+                        <div class="client-ticket-navs">
+                            <label for="client1" id="dot1"><img src="~/Sources/Images/Logoo.png"></label>
+                            <label for="client2" id="dot2"><img src="~/Sources/Images/MB.png"></label>
+                            <label for="client3" id="dot3"><img src="~/Sources/Images/unnamed.png"></label>
+                            <label for="client4" id="dot4"><img src="~/Sources/Images/info2.png"></label>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="split">
+                    <form>
+                        <span class="select-title">url</span>
+                        <input type="text" id="VideoLink" placeholder="https://">
+                    </form>
+                    <input class="form-control" id="TaskTitle" placeholder="TaskTitle...." />
+                    <br>
+                    <form>
+                        <span class="select-title">type:</span>
+                        <div class="custom-select">
+                            <select id="ChooseTaskType">
+                                <option value="daily">daily</option>
+                                <option value="longterm">longterm</option>
+                                <option value="supportive">supportive</option>
+                            </select>
+                            <input type="date" id="LongTermDatePicker" style="display:none" />
+                            <input type="number" placeholder="Hours ?......" id="DailyTimePicker"  />
+                            <span class="custom-arrow"></span>
+                        </div>
+                    </form>
+                    <br>
+                    <form>
+                        <span class="select-title">platform</span>
+                        <div class="custom-select">
+                            <select id="ChoosePlateForm">
+                                <option value="youTube">youTube</option>
+                                <option value="facebook">facebook</option>
+                                <option value="digital">digital</option>
+                            </select>
+                            <span class="custom-arrow"></span>
+                        </div>
+                    </form>
+                </div>
+                <form class="split" enctype="multipart/form-data" action="/Home/AddTask" method="post">
+                    <input type="hidden" name="SelectedPerson" id="HiddenSelectedPerson" />
+                    <input type="hidden" name="SelectedClient" id="HiddenSelectedClient" />
+                    <input type="hidden" name="URL" id="HiddenURL" />
+                    <input type="hidden" name="TaskType" id="HiddenTaskType" />
+                    <input type="hidden" name="TaskPlateForm" id="HiddenPlateForm" />
+                    <input type="hidden" name="EndDate" id="HiddenEndDate" />
+                    <input type="hidden" name="TaskTitle" id="HiddenTaskTitle" />
+                    <input type="hidden" name="fromUserId" id="HiddenFromTask" />
+                    <input type="hidden" name="TaskDailyTime" id="TaskDailyTime" />
+                    <input type="hidden" name="argent" id="argent" />
+                    <span class="select-title">description:</span>
+                    <textarea placeholder="Remember, be nice!" id="comment" name="Discription" rows="13" cols="30"></textarea>
+                </form>
+                <div style="position: relative; left: -40px; top: -3px" class="form-check form-switch">
+                    <input style="cursor:pointer" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">necessary  </label>
+                    <span style='font-size:32px;'>&#128548;</span>
+                </div>
+                <button id="SubmitButton" class="send-task" onclick="CreateTask()" type="button"><a>send task</a></button>
+            </div>
+        </div>
+        <! -----–-----– End ticket parent  ------------- >
+
+    </div>
+
+
+    <! --------- end Medium -------------------->
+
+
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/Tickets.js"></script>
+    <script src="~/Scripts/BackEndScripts.js"></script>
+
+    <script>
+        var SelectedPersonName = "";
+        var SelectedClient = "";
+
+        /****************** Hub Connection*********** */
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/CommentHub")
+            .build();
+
+        connection.on("AddNotification", (MessageContent, userId)=> {
+            if (document.getElementById("UserLoggedId").value == userId) {
+                let ParentHeaderElement = document.querySelector("header");
+                let DivAlert = document.createElement("div");
+                DivAlert.className = "alert";
+                let SpanElement = document.createElement("span");
+                SpanElement.className = "closebtn";
+                SpanElement.onclick = DeleteNotification;
+                SpanElement.innerHTML = "&times;";
+                DivAlert.innerHTML = MessageContent;
+                DivAlert.append(SpanElement);
+                ParentHeaderElement.append(DivAlert);
+            }
+        });
+
+        connection.start().then(function () { console.log("Connecting ....") }).catch(err => console.error(err.toString())); 
+
+        /**************************************** */
+
+        let LogOut = () => {
+            window.location.href = "/Home/SignOut?UserId=@Model.User.id"
+        }
+        let ShowTasks = (TaskState) => {
+            if (TaskState == "Sent") {
+                window.location.href = "/Home/ShowSentTasks?ClientId=" + document.getElementById("UserLoggedId").value
+            } else {
+                window.location.href = "/Home/ShowTasks?ClientId=" + document.getElementById("UserLoggedId").value + "&TaskState=" + TaskState;
+            }
+        }
+        var ShowNotifications = () => {
+            console.log("Hello");
+        }
+
+        var DeleteNotification = (element) => {
+            element.parentElement.style.display = 'none'
+            if (element != null) {
+                var NotificationId = element.parentElement.querySelector("input").value;
+                fetch("/Home/DeleteNotification?NotificationId=" + NotificationId)
+                    .then(res => console.log("Done"));
+            }
+        }
+
+        let FilterName = (element) => {
+            if (element.value == "") {
+                document.querySelectorAll(".user-control").forEach(ele => {
+                    ele.classList.remove("Visible");
+                    ele.classList.remove("Hidden");
+                })
+            }
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".officer-id p:first-child").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+
+
+        let FilterSelectTaskType = (element) => {
+
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".team>p:first-child").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else if (element.value == "All") {
+                    document.querySelectorAll(".user-control").forEach(ele => {
+                        ele.classList.add("Visible");
+                    })
+                }
+                else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+
+        let FilterSelectPosition = (element) => {
+            document.querySelectorAll(".user-control").forEach(ele => {
+                ele.classList.remove("Visible");
+                ele.classList.remove("Hidden");
+            })
+            document.querySelectorAll(".user-control").forEach(ele => {
+                if (ele.querySelector(".officer-id p:nth-child(2)").textContent.toLowerCase().startsWith(element.value.toLowerCase())) {
+                    ele.classList.add("Visible");
+                    ele.classList.remove("Hidden");
+                } else if (element.value == "All") {
+                    document.querySelectorAll(".user-control").forEach(ele => {
+                        ele.classList.add("Visible");
+                    })
+                }
+                else {
+                    ele.classList.add("Hidden");
+                    ele.classList.remove("Visible");
+                }
+            })
+            document.querySelectorAll(".Hidden").forEach(x => {
+                x.style.display = "none";
+            })
+            document.querySelectorAll(".Visible").forEach(x => {
+                x.style.display = "block";
+            })
+        }
+        document.querySelectorAll(".user-control").forEach(ele => {
+            ele.querySelector("div>img").onclick = (e) => {
+                document.querySelectorAll(".container>div").forEach(elem => {
+                    elem.classList.remove("Selected");
+                    elem.classList.add("NotSelected");
+                })
+                e.target.parentElement.parentElement.classList.add("Selected");
+                e.target.parentElement.parentElement.classList.remove("NotSelected");
+                SelectedPersonName = document.querySelector(".Selected").querySelector(".officer-id p").textContent;
+                document.querySelectorAll(".NotSelected").forEach(Y => {
+                    Y.style.display = "none";
+                })
+                document.querySelectorAll(".Selected").forEach(Y => {
+                    console.log(Y)
+                    Y.style.display = "block";
+                    Y.parentElement.parentElement.style.height = "auto"
+                })
+
+            }
+        })
+
+
+        let CreateTask = () => {
+            document.querySelectorAll(".container>div").forEach(elem => {
+                elem.classList.remove("Selected");
+            })
+
+            document.getElementById("HiddenSelectedPerson").value = SelectedPersonName;
+            document.getElementById("HiddenSelectedClient").value = SelectedClient;
+            document.getElementById("HiddenURL").value = document.getElementById("VideoLink").value;
+            document.getElementById("HiddenTaskType").value = document.getElementById("ChooseTaskType").value;
+            document.getElementById("HiddenPlateForm").value = document.getElementById("ChoosePlateForm").value;
+            document.getElementById("HiddenEndDate").value = document.getElementById("LongTermDatePicker").value;
+            document.getElementById("HiddenFromTask").value = document.getElementById("UserLoggedId").value;
+            document.getElementById("HiddenTaskTitle").value = document.getElementById("TaskTitle").value;
+            document.getElementById("TaskDailyTime").value = document.getElementById("DailyTimePicker").value;
+            document.getElementById("argent").value = document.getElementById("flexSwitchCheckDefault").checked;
+            document.querySelector("form.split").submit();
+        }
+
+        document.getElementById("ChooseTaskType").onchange = () => {
+            let Val = document.getElementById("ChooseTaskType").value;
+            if (Val == "longterm") {
+                document.getElementById("LongTermDatePicker").style.display = "block";
+                document.getElementById("DailyTimePicker").style.display = "none";
+            } else if (Val == "daily"){
+                document.getElementById("LongTermDatePicker").style.display = "none";
+                document.getElementById("DailyTimePicker").style.display = "block";
+            } else {
+                document.getElementById("LongTermDatePicker").style.display = "none";
+                document.getElementById("DailyTimePicker").style.display = "none";
+            }
+        }
+
+        //***************TimeCounter************************
+
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        function generateString(length) {
+            let result = ' ';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+
+            return result;
+        }
+
+        var ConfirmCode = "";
+        var NewPassword = "";
+
+        var SendRequest = () => {
+            var AnnualFromDate = "";
+            var AnnualToDate = "";
+            var two_hoursFrom = "";
+            var two_hoursTo = "";
+            var MoneyValue = 0;
+            var Annual = document.getElementById("box-1").checked;
+            var TowHours = document.getElementById("box-2").checked;
+            var Loan = document.getElementById("box-3").checked;
+            AnnualFromDate = document.getElementById("annual1").value;
+            AnnualToDate = document.getElementById("annual2").value;
+            two_hoursFrom = document.getElementById("two_hours1").value;
+            two_hoursTo = document.getElementById("two_hours2").value;
+            MoneyValue = document.getElementById("MoneyValue").value;
+
+            if (MoneyValue == 0) {
+                MoneyValue = 0
+            }
+
+            fetch("/Home/SendRquest?Annual=" + Annual + "&TowHours=" + TowHours + "&Loan=" + Loan + "&UserID=" + @Model.User.id + "&AnnualFromDate=" + AnnualFromDate + "&AnnualToDate=" + AnnualToDate + "&two_hoursFrom=" + two_hoursFrom + "&two_hoursTo=" + two_hoursTo + "&MoneyValue=" + MoneyValue)
+                .then(res => {
+                if (res.status == 200) {
+                    alert("Done ;)")
+                }
+            });
+        }
+
+        var ChangePasswordSubmit = () => {
+
+            ConfirmCode = generateString(6);
+            currentPassword = document.getElementById("CurrentPassword").value;
+            NewPassword = document.getElementById("NewPassword").value;
+            ConfirmNewPassword = document.getElementById("ConfirmNewPassword").value;
+            fetch("/Home/ChangePassword?currentPassword=" + currentPassword + "&NewPassword=" + NewPassword + "&ConfirmNewPassword=" + ConfirmNewPassword + "&UserId=" + @Model.User.id)
+                .then(response => {
+                    response.text().then(function (text) {
+                        if (text == "Done") {
+                            Email.send({
+                                Host: "smtp.gmail.com",
+                                Username: "ahmedelhoceny741@gmail.com",
+                                Password: "0182732208",
+                                To: document.getElementById("UserEmail").value,
+                                From: "ahmedelhoceny741@gmail.com",
+                                Subject: "ChangePassword",
+                                Body: "Confirm Code is :   " + ConfirmCode
+                            }).then(
+                                message => {
+                                    document.querySelector(".ChangePassword").style.top = "-100%";
+                                    document.querySelector(".ChangePassword2").style.top = "36%";
+                                }
+                            );
+                        } else {
+                            alert("Failed :(");
+                        }
+                    });
+                })
+        }
+
+        let ConfirmPasswordSubmit = () => {
+            var ConfirmInput = document.getElementById("ConfirmCode").value;
+            fetch("/Home/ConfirmCode?ConfirmInput=" + ConfirmInput + "&ConfirmCode=" + ConfirmCode + "&UserId=@Model.User.id&NewPassWord=" + NewPassword)
+                .then(res => res.text().then(function (text) {
+                    if (text == "Done") {
+                        alert("Done ;)")
+                        document.querySelector(".ChangePassword2").style.top = "-100%";
+                    } else {
+                        alert("Failed :(")
+                        document.querySelector(".ChangePassword2").style.top = "-100%";
+                    }
+                }))
+        }
+
+        //***************TimeCounter************************
+        document.querySelectorAll(".custom-select label").forEach(ele => {
+            ele.onclick = (e) => {
+                if (e.target.parentElement.id == "dot1") {
+                    SelectedClient = "Injaz"
+                } else if (e.target.parentElement.id == "dot2") {
+                    SelectedClient = "Music Box"
+                } else if (e.target.parentElement.id == "dot3") {
+                    SelectedClient = "Awakening"
+                } else if (e.target.parentElement.id == "dot4") {
+                    SelectedClient = "Info"
+                }
+            }
+        })
+
+        var Opening = () => {
+            window.location.href = "/Home/ShowTasks?ClientId=@Model.User.id"
+        }
+
+        var ChangePassword = () => {
+            document.querySelector(".ChangePassword").style.top = "35%";
+        }
+
+        document.getElementById("ChooseTaskType").onclick = () => {
+            if (document.getElementById("ChooseTaskType").value == "longterm") {
+                document.getElementById("datePicker").style.display = "inline";
+                document.getElementById("DailyTimePicker").style.display = "none";
+            } else {
+                document.getElementById("datePicker").style.display = "none";
+                document.getElementById("DailyTimePicker").style.display = "inline";
+            }
+
+        }
+
+        document.querySelectorAll(".user-control>div>img").forEach(Element => {
+
+            Element.addEventListener("click", ClickPicker , this);
+        })
+        document.querySelectorAll(".ClientCheck").forEach(Element => {
+            Element.classList.add("SelectedClient");
+        })
+        let CheckClient = (e) => {
+            SelectedClient = e.target.parentElement.id;
+            console.log(CheckClient)
+        }
+
+        document.getElementById("MoneyValue").value = 0;
+
+       
+
+    </script>
+
+
+</body>
+</html>
+
+
